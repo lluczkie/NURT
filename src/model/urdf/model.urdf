@@ -4,12 +4,97 @@
   <xacro:property name="yaml_file" value="$(find model)/urdf/params.yaml" />
   <xacro:property name="params_dict" value="${xacro.load_yaml(yaml_file)}"/>
 
-  <xacro:property name="cyl_len" value="${params_dict['param']}" />
+  <xacro:property name="servo" value="${params_dict['servo']}" />
+  <xacro:property name="bolt" value="${params_dict['bolt']}" />
+  <xacro:property name="nozzle" value="${params_dict['nozzle']}" />
+  <xacro:property name="leg" value="${params_dict['leg']}" />
+  <xacro:property name="wheel" value="${params_dict['wheel']}" />
+
   <link name="base_link">
     <visual>
       <geometry>
-        <cylinder length="${cyl_len}" radius="0.2"/>
+        <box size="${servo['x']} ${servo['y']} ${servo['z']}"/>
       </geometry>
     </visual>
   </link>
+
+  <joint name="j1" type="revolute">
+        <axis xyz="0.0 0.0 1"/>
+        <limit lower="-3.14" upper="3.14" effort="250.0" velocity="0.5"/>
+        <parent link="base_link"/>
+        <child link="servo"/>
+        <origin xyz = "0 0 ${servo['z']/2}"/>
+    </joint>
+
+  <link name="servo">
+    <visual>
+      <geometry>
+        <box size="${servo['x']} ${servo['y']} ${servo['z']}"/>
+      </geometry>
+      <origin xyz="0 0 ${servo['z']/2}"/>
+    </visual>
+  </link>
+
+  <joint name="servo_to_bolt" type="fixed">
+    <parent link="servo"/>
+    <child link="bolt"/>
+    <origin xyz = "${servo['x']/2} 0 ${servo['z']/2}"/>
+  </joint>
+
+  <link name="bolt">
+    <visual>
+      <geometry>
+        <cylinder radius="${bolt['r']}" length="${bolt['l']}"/>
+      </geometry>
+      <origin xyz="${bolt['l']/2} 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+
+  <joint name="bolt_to_leg" type="fixed">
+    <parent link="bolt"/>
+    <child link="leg"/>
+    <origin xyz = "${bolt['l']-leg['x']/2} 0 0"/>
+  </joint>
+
+  <link name="leg">
+    <visual>
+      <geometry>
+        <box size="${leg['x']} ${leg['y']} ${leg['z']}"/>
+      </geometry>
+      <origin xyz="0 0 ${-leg['z']/2}"/>
+    </visual>
+  </link>
+
+  <joint name="leg_to_wheel" type="fixed">
+    <parent link="leg"/>
+    <child link="wheel"/>
+    <origin xyz = "0 0 ${-leg['z']}"/>
+  </joint>
+
+  <link name="wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="${wheel['r']}" length="${wheel['l']}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+
+  <joint name="bolt_to_nozzle" type="prismatic">
+    <limit lower="${nozzle['l']/2}" upper="${bolt['l']-nozzle['l']/2-leg['x']}" effort="250.0" velocity="0.5"/>
+    <parent link="bolt"/>
+    <child link="nozzle"/>
+    <origin xyz = "0 0 0"/>
+  </joint>
+
+  <link name="nozzle">
+    <visual>
+      <geometry>
+        <cylinder radius="${nozzle['r']}" length="${nozzle['l']}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+
+
 </robot>

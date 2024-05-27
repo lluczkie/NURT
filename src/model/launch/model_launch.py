@@ -40,5 +40,20 @@ def generate_launch_description():
     )
 
     ld.add_action(rviz)
+    
+    joint_state_publisher_gui_node = Node(
+        package="joint_state_publisher_gui",
+        executable="joint_state_publisher_gui",
+        name="joint_state_publisher_gui"
+    )
+    
+    ld.add_action(joint_state_publisher_gui_node)
 
+    cup_publisher = Node(
+        package="model",
+        executable="cup_publisher"
+    )
+
+    ld.add_action(cup_publisher)
+    
     return ld

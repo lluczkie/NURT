@@ -24,6 +24,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'cup_publisher=model.cup_publisher:main'
         ],
     },
 )
