@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+
+  <xacro:property name="yaml_file" value="$(find model)/urdf/params.yaml" />
+  <xacro:property name="params_dict" value="${xacro.load_yaml(yaml_file)}"/>
+
+  <xacro:property name="cyl_len" value="${params_dict['param']}" />
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="${cyl_len}" radius="0.2"/>
+      </geometry>
+    </visual>
+  </link>
+</robot>
