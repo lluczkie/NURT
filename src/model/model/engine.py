@@ -58,6 +58,7 @@ class Engine(Node):
         else:
             current_position = self.nozzle_position
             goal_position = [x0, y0, z0]
+            goal_joints = self.calculate_reverse_kinematic(goal_position[0], goal_position[1])
             difference_vector = self.get_two_point_difference(current_position, goal_position)
             difference = 0
             for i in range(2):
@@ -66,7 +67,7 @@ class Engine(Node):
             difference = sqrt(difference)
             if abs(difference) < 0.0001:
                 # reached target tolerance  
-                self.jointMsg.position = self.calculate_reverse_kinematic(goal_position[0], goal_position[1])
+                self.jointMsg.position = goal_joints
                 self.iter = 0
                 self.state = 0     
             else:
@@ -76,7 +77,7 @@ class Engine(Node):
                 position = self.calculate_reverse_kinematic(target_x, target_y)
                 if self.state == 0:
                     self.jointMsg.position[0] = position[0]
-                    if abs(self.jointMsg.position[0] - self.calculate_reverse_kinematic(goal_position[0], goal_position[1])[0]) < 0.0001:
+                    if abs(self.jointMsg.position[0] - goal_joints[0]) < 0.0001:
                         self.state = 1
                 if self.state == 1:
                     self.jointMsg.position = position
