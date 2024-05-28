@@ -30,6 +30,7 @@ class Engine(Node):
         self.init_joints()
         self.iter = 0
         self.state = 0
+        self.speed = 500
         self.timer = self.create_timer(0.01, self.update_joints)
 
     def init_joints(self):
@@ -71,15 +72,17 @@ class Engine(Node):
                 self.iter = 0
                 self.state = 0     
             else:
-                target_x = float(current_position[0] + (difference_vector[0]) / max(2, (1000 - self.iter)))
-                target_y = float(current_position[1] + (difference_vector[1]) / max(2, (1000 - self.iter)))
+                target_x = float(current_position[0] + (difference_vector[0]) / max(2, (self.speed - self.iter)))
+                target_y = float(current_position[1] + (difference_vector[1]) / max(2, (self.speed - self.iter)))
                 self.iter += 1
                 position = self.calculate_reverse_kinematic(target_x, target_y)
                 if self.state == 0:
+                    self.speed = 500
                     self.jointMsg.position[0] = position[0]
                     if abs(self.jointMsg.position[0] - goal_joints[0]) < 0.0001:
                         self.state = 1
                 if self.state == 1:
+                    self.speed = 1000
                     self.jointMsg.position = position
 
     def calculate_reverse_kinematic(self, x0, y0):
