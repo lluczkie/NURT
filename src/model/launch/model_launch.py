@@ -47,7 +47,7 @@ def generate_launch_description():
         name="joint_state_publisher_gui"
     )
     
-    ld.add_action(joint_state_publisher_gui_node)
+    # ld.add_action(joint_state_publisher_gui_node)
 
     cup_publisher = Node(
         package="model",
@@ -56,4 +56,12 @@ def generate_launch_description():
 
     ld.add_action(cup_publisher)
     
+    
+    engine = Node(
+        package="model",
+        executable="engine"
+    )
+
+    ld.add_action(engine)
+
     return ld
