@@ -10,11 +10,24 @@
   <xacro:property name="leg" value="${params_dict['leg']}" />
   <xacro:property name="wheel" value="${params_dict['wheel']}" />
 
+  <material name="white">
+      <color rgba="1 1 1 1"/>
+  </material>
+
+  <material name="gray">
+      <color rgba="0.7 0.7 0.7 1"/>
+  </material>
+  
+  <material name="black">
+      <color rgba="0 0 0 1"/>
+  </material>
+
   <link name="base_link">
     <visual>
       <geometry>
         <box size="${servo['x']} ${servo['y']} ${servo['z']}"/>
       </geometry>
+      <material name="black"/>
     </visual>
   </link>
 
@@ -31,6 +44,7 @@
       <geometry>
         <box size="${servo['x']} ${servo['y']} ${servo['z']}"/>
       </geometry>
+      <material name="black"/>
       <origin xyz="0 0 ${servo['z']/2}"/>
     </visual>
   </link>
@@ -46,6 +60,7 @@
       <geometry>
         <cylinder radius="${bolt['r']}" length="${bolt['l']}"/>
       </geometry>
+      <material name="gray"/>
       <origin xyz="${bolt['l']/2} 0 0" rpy="0 1.57 0"/>
     </visual>
   </link>
@@ -61,6 +76,7 @@
       <geometry>
         <box size="${leg['x']} ${leg['y']} ${leg['z']}"/>
       </geometry>
+      <material name="white"/>
       <origin xyz="0 0 ${-leg['z']/2}"/>
     </visual>
   </link>
@@ -68,7 +84,7 @@
   <joint name="leg_to_wheel" type="fixed">
     <parent link="leg"/>
     <child link="wheel"/>
-    <origin xyz = "0 0 ${-leg['z']}"/>
+    <origin xyz = "${(leg['x']+wheel['l'])/2} 0 ${-leg['z']}"/>
   </joint>
 
   <link name="wheel">
@@ -76,6 +92,7 @@
       <geometry>
         <cylinder radius="${wheel['r']}" length="${wheel['l']}"/>
       </geometry>
+      <material name="black"/>
       <origin xyz="0 0 0" rpy="0 1.57 0"/>
     </visual>
   </link>
@@ -92,9 +109,8 @@
       <geometry>
         <cylinder radius="${nozzle['r']}" length="${nozzle['l']}"/>
       </geometry>
+      <material name="white"/>
       <origin xyz="0 0 0" rpy="0 1.57 0"/>
     </visual>
   </link>
-
-
 </robot>

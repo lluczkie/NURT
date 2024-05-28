@@ -9,7 +9,7 @@ import random
 class CupPublisher(Node):
 
     def __init__(self):
-        super().__init__('marker_publisher')
+        super().__init__('cup_publisher')
         
         self.input_listener = self.create_subscription(PointStamped, 'clicked_point', self.cup_request, 10)
         self.markers_publisher = self.create_publisher(Marker, 'cup_pose', 10)
