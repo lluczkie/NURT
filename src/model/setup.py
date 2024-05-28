@@ -25,7 +25,8 @@ setup(
     entry_points={
         'console_scripts': [
             'cup_publisher=model.cup_publisher:main',
-            'engine=model.engine:main'
+            'engine=model.engine:main',
+            'nozzle_position=model.nozzle_position:main'
         ],
     },
 )

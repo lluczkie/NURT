@@ -64,4 +64,11 @@ def generate_launch_description():
 
     ld.add_action(engine)
 
+    nozzle_position = Node(
+        package="model",
+        executable="nozzle_position"
+    )
+
+    ld.add_action(nozzle_position)
+
     return ld
