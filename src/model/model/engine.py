@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 from sensor_msgs.msg import JointState
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import MarkerArray
 from geometry_msgs.msg import PointStamped
 import yaml
 import os
@@ -13,7 +13,7 @@ class Engine(Node):
     def __init__(self):
         super().__init__('engine')
         self.publisher = self.create_publisher(JointState, 'joint_states', 10)
-        self.cup_subscription = self.create_subscription(Marker, 'cup_pose', self.cup_callback, 10)
+        self.cup_subscription = self.create_subscription(MarkerArray, 'cup_pose', self.cup_callback, 10)
         self.nozzle_subscription = self.create_subscription(PointStamped, 'nozzle_position', self.get_nozzle_position, 10)
 
         self.cup_subscription
@@ -53,6 +53,8 @@ class Engine(Node):
                 self.state = 2
         if self.state == 2:
             self.move_nozzle_to_target()
+        if self.state == 3:
+            pass
 
         self.jointMsg.header.stamp = self.get_clock().now().to_msg()
         self.publisher.publish(self.jointMsg)
@@ -71,10 +73,10 @@ class Engine(Node):
     def get_nozzle_position(self, pointMsg):
         self.nozzle_position = [pointMsg.point.x, pointMsg.point.y, pointMsg.point.z]
 
-    def cup_callback(self, markerMsg):
+    def cup_callback(self, markersMsg):
 
-        x0 = markerMsg.pose.position.x
-        y0 = markerMsg.pose.position.y
+        x0 = markersMsg.markers[0].pose.position.x
+        y0 = markersMsg.markers[0].pose.position.y
         [theta1, p1] = self.calculate_reverse_kinematic(x0, y0)
 
         if p1 < self.nozzle['l']/2 or p1 > self.bolt['l']-self.nozzle['l']/2-self.leg['x']:
