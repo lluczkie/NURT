@@ -18,7 +18,7 @@ class Engine(Node):
         self.fill_publisher = self.create_publisher(Fill, 'fill', 10)
 
         self.cup_subscription
-        self.nozzle_subscription  # prevent unused variable warning
+        
         project_path = os.path.dirname("NURT")
         file_path = project_path + "src/model/urdf/params.yaml"
         with open(file_path, 'r') as file:
