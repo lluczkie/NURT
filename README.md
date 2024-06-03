@@ -27,6 +27,4 @@
 (Under developement)
 This ROS2 project is an early stage visualization of a NURT project under scientific club TAPIR at Faculty of Electrical Engineering at Warsaw University of Technology. We aim to construct a robot that finds glasses within it's workspace and fills them with a drink of choice. Visualization helps understand robot's desired behavior.
 
-<!-- [![Watch the video](https://img.youtube.com/vi/oXI_7FPkqcA/hqdefault.jpg)](https://youtu.be/oXI_7FPkqcA) -->
-
-<video controls src="videos/robot_motion_v3.mov.mp4" title="Title"></video>
+[![Watch the video](https://img.youtube.com/vi/oXI_7FPkqcA/hqdefault.jpg)](https://youtu.be/oXI_7FPkqcA)
