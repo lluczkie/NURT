@@ -74,7 +74,7 @@ class Engine(Node):
 
     def cup_callback(self, pointMsg):
         self.filled = 0.0
-        
+
         x0 = pointMsg.point.x
         y0 = pointMsg.point.y
         [theta1, p1] = self.calculate_reverse_kinematic(x0, y0)
@@ -88,9 +88,7 @@ class Engine(Node):
 
     def calculate_reverse_kinematic(self, x0, y0):
             theta1 = (atan2(y0, x0) + 2*pi) % (2*pi)
-            x = x0-cos(theta1)*self.servo['x']/2
-            y = y0-sin(theta1)*self.servo['x']/2
-            p1 = sqrt(pow(x, 2) + pow(y, 2))
+            p1 = sqrt(pow(x0, 2) + pow(y0, 2)) - self.servo['x']/2
             return [theta1, p1]
 
     def fill(self):
