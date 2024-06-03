@@ -7,14 +7,15 @@ from geometry_msgs.msg import PointStamped
 import yaml
 import os
 from math import atan2, copysign, pi, sqrt, acos, asin, cos, sin
+from custom_interfaces.msg import Fill
 
 class Engine(Node):
 
     def __init__(self):
         super().__init__('engine')
         self.publisher = self.create_publisher(JointState, 'joint_states', 10)
-        self.cup_subscription = self.create_subscription(MarkerArray, 'cup_pose', self.cup_callback, 10)
-        self.nozzle_subscription = self.create_subscription(PointStamped, 'nozzle_position', self.get_nozzle_position, 10)
+        self.cup_subscription = self.create_subscription(PointStamped, 'clicked_point', self.cup_callback, 10)
+        self.fill_publisher = self.create_publisher(Fill, 'fill', 10)
 
         self.cup_subscription
         self.nozzle_subscription  # prevent unused variable warning
@@ -32,6 +33,7 @@ class Engine(Node):
         self.p1_speed=0.1
         self.period = 0.1
         self.state = 0
+        self.filled = 0.0
         self.init_joints()
         self.timer = self.create_timer(self.period, self.go)
 
@@ -54,7 +56,7 @@ class Engine(Node):
         if self.state == 2:
             self.move_nozzle_to_target()
         if self.state == 3:
-            pass
+            self.fill()
 
         self.jointMsg.header.stamp = self.get_clock().now().to_msg()
         self.publisher.publish(self.jointMsg)
@@ -70,13 +72,9 @@ class Engine(Node):
         else:
             self.state = 3
 
-    def get_nozzle_position(self, pointMsg):
-        self.nozzle_position = [pointMsg.point.x, pointMsg.point.y, pointMsg.point.z]
-
-    def cup_callback(self, markersMsg):
-
-        x0 = markersMsg.markers[0].pose.position.x
-        y0 = markersMsg.markers[0].pose.position.y
+    def cup_callback(self, pointMsg):
+        x0 = pointMsg.point.x
+        y0 = pointMsg.point.y
         [theta1, p1] = self.calculate_reverse_kinematic(x0, y0)
 
         if p1 < self.nozzle['l']/2 or p1 > self.bolt['l']-self.nozzle['l']/2-self.leg['x']:
@@ -93,12 +91,15 @@ class Engine(Node):
             p1 = sqrt(pow(x, 2) + pow(y, 2))
             return [theta1, p1]
 
-    def get_two_point_difference(self, point1, point2):
-        y = point2[1] - point1[1] 
-        z = point2[2] - point1[2]
-        x = point2[0] - point1[0]
-        difference = [x, y, z]
-        return difference 
+    def fill(self):
+        fillMsg = Fill()
+        fillMsg.filled = self.filled
+        self.fill_publisher.publish(fillMsg)
+        if (0.9 - self.filled) <= 0.0001:
+            self.filled = 0.0
+            self.state = 4
+        else:
+            self.filled += 0.005
 
 def main(args=None):
     rclpy.init(args=args)
