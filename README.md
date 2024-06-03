@@ -8,7 +8,7 @@
 ## Authors
 ### Main project
 * Antoni Banuch
-* Bartosz Górniewski
+* [Bartosz Górniewski](https://github.com/Karangia23)
 * Damian Borkowski
 * Filip Matysiewicz
 * Karol Knyziak
