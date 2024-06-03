@@ -12,11 +12,11 @@
 * Damian Borkowski
 * Filip Matysiewicz
 * Karol Knyziak
-* Lidia Łuczkiewicz: [@lluczkie](@lluczkie)
+* [Lidia Łuczkiewicz](https://github.com/lluczkie)
 * Sebastian Łada
 * Wojciech KOnecki
 ### Visualization
-* Lidia Łuczkiewicz: [@lluczkie](@lluczkie)
+* [Lidia Łuczkiewicz](https://github.com/lluczkie)
 
 ## Technology
 * ROS2, RViz2 - for visualization
