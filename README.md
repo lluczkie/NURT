@@ -10,7 +10,7 @@
 * Antoni Banuch
 * [Bartosz Górniewski](https://github.com/Karangia23)
 * Damian Borkowski
-* Filip Matysiewicz
+* [Filip Matysiewicz](https://github.com/Filipix18)
 * Karol Knyziak
 * [Lidia Łuczkiewicz](https://github.com/lluczkie)
 * Sebastian Łada
