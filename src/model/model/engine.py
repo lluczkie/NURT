@@ -26,12 +26,12 @@ class Engine(Node):
         self.bolt = self.params['bolt']
         self.nozzle = self.params['nozzle']
         self.leg = self.params['leg']
+        self.cup_position = None
 
+        self.speed=0.15
+        self.period = 0.1
         self.init_joints()
-        self.iter = 0
-        self.state = 0
-        self.speed = 500
-        self.timer = self.create_timer(0.01, self.update_joints)
+        self.timer = self.create_timer(self.period, self.go)
 
     def init_joints(self):
         self.jointMsg = JointState()
@@ -41,7 +41,8 @@ class Engine(Node):
         self.jointMsg.position = [0.0, 0.01]
         self.publisher.publish(self.jointMsg)
 
-    def update_joints(self):
+    def go(self):
+        self.jointMsg.position[0] += self.speed * self.period
         self.jointMsg.header.stamp = self.get_clock().now().to_msg()
         self.publisher.publish(self.jointMsg)
 
@@ -52,38 +53,7 @@ class Engine(Node):
         x0 = markerMsg.pose.position.x
         y0 = markerMsg.pose.position.y
         z0 = markerMsg.pose.position.z
-
-        len=sqrt(pow(x0, 2) + pow(y0, 2))-self.servo['x']/2
-        if len < self.nozzle['l']/2 or len > self.bolt['l']-self.nozzle['l']/2-self.leg['x']:
-            self.get_logger().warn(f"cannot reach position: \n\tx: {x0}\n\ty: {y0}\n\tz: {z0}\n")
-        else:
-            current_position = self.nozzle_position
-            goal_position = [x0, y0, z0]
-            goal_joints = self.calculate_reverse_kinematic(goal_position[0], goal_position[1])
-            difference_vector = self.get_two_point_difference(current_position, goal_position)
-            difference = 0
-            for i in range(2):
-                delta_i = difference_vector[i]
-                difference += delta_i * delta_i
-            difference = sqrt(difference)
-            if abs(difference) < 0.0001:
-                # reached target tolerance  
-                self.jointMsg.position = goal_joints
-                self.iter = 0
-                self.state = 0     
-            else:
-                target_x = float(current_position[0] + (difference_vector[0]) / max(2, (self.speed - self.iter)))
-                target_y = float(current_position[1] + (difference_vector[1]) / max(2, (self.speed - self.iter)))
-                self.iter += 1
-                position = self.calculate_reverse_kinematic(target_x, target_y)
-                if self.state == 0:
-                    self.speed = 500
-                    self.jointMsg.position[0] = position[0]
-                    if abs(self.jointMsg.position[0] - goal_joints[0]) < 0.0001:
-                        self.state = 1
-                if self.state == 1:
-                    self.speed = 1000
-                    self.jointMsg.position = position
+        self.cup_position = [x0, y0, z0]
 
     def calculate_reverse_kinematic(self, x0, y0):
             theta1 = atan2(y0, x0)
