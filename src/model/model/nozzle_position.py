@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from math import pi, sin, cos, sqrt
+from math import sin, cos
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PointStamped
 import os, yaml

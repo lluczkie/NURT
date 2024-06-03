@@ -1,6 +1,5 @@
 import rclpy
 from rclpy.node import Node
-from math import pi, sin, cos, sqrt
 from visualization_msgs.msg import Marker, MarkerArray
 from geometry_msgs.msg import PointStamped
 from custom_interfaces.msg import Fill

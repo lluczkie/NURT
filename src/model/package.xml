@@ -13,7 +13,15 @@
   <test_depend>python3-pytest</test_depend>
   
   <exec_depend>ros2launch</exec_depend>
+  <exec_depend>numpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>yaml</exec_depend>
+  <exec_depend>os</exec_depend>
+  <exec_depend>math</exec_depend>
   <exec_depend>custom_interfaces</exec_depend>
+  <exec_depend>time</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>

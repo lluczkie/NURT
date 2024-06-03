@@ -6,8 +6,9 @@ from visualization_msgs.msg import MarkerArray
 from geometry_msgs.msg import PointStamped
 import yaml
 import os
-from math import atan2, copysign, pi, sqrt, acos, asin, cos, sin
+from math import atan2, copysign, pi, sqrt, cos, sin
 from custom_interfaces.msg import Fill
+from time import sleep
 
 class Engine(Node):
 
@@ -18,7 +19,7 @@ class Engine(Node):
         self.fill_publisher = self.create_publisher(Fill, 'fill', 10)
 
         self.cup_subscription
-        
+
         project_path = os.path.dirname("NURT")
         file_path = project_path + "src/model/urdf/params.yaml"
         with open(file_path, 'r') as file:
@@ -49,6 +50,7 @@ class Engine(Node):
         if self.state == 0:
             self.turn()
         if self.state == 1:
+            sleep(0.01)
             if abs(self.cup_position[0] - self.jointMsg.position[0]) > self.j1_speed * self.period:
                 self.turn()
             else:
