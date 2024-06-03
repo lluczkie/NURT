@@ -28,8 +28,10 @@ class Engine(Node):
         self.leg = self.params['leg']
         self.cup_position = None
 
-        self.speed=0.15
+        self.j1_speed=0.15
+        self.p1_speed=0.1
         self.period = 0.1
+        self.state = 0
         self.init_joints()
         self.timer = self.create_timer(self.period, self.go)
 
@@ -42,25 +44,45 @@ class Engine(Node):
         self.publisher.publish(self.jointMsg)
 
     def go(self):
-        if self.cup_position is not None:
-            if abs(self.cup_position[0] - self.jointMsg.position[0]) > self.speed * self.period:
-                self.jointMsg.position[0] += self.speed * self.period
-                self.jointMsg.position[0] %= (2*pi)
-        else:
-            self.jointMsg.position[0] += self.speed * self.period
-            self.jointMsg.position[0] %= (2*pi)
+        if self.state == 0:
+            self.turn()
+        if self.state == 1:
+            if abs(self.cup_position[0] - self.jointMsg.position[0]) > self.j1_speed * self.period:
+                self.turn()
+            else:
+                self.state = 2
+        if self.state == 2:
+            self.move_nozzle_to_target()
 
         self.jointMsg.header.stamp = self.get_clock().now().to_msg()
         self.publisher.publish(self.jointMsg)
+    
+    def turn(self):
+        self.jointMsg.position[0] += self.j1_speed * self.period
+        self.jointMsg.position[0] %= (2*pi)
+
+    def move_nozzle_to_target(self):
+        diff = self.cup_position[1] - self.jointMsg.position[1]
+        if abs(diff) > self.p1_speed * self.period:
+            self.jointMsg.position[1] += copysign(self.p1_speed * self.period, diff)
+        else:
+            self.state = 3
 
     def get_nozzle_position(self, pointMsg):
         self.nozzle_position = [pointMsg.point.x, pointMsg.point.y, pointMsg.point.z]
 
     def cup_callback(self, markerMsg):
+
         x0 = markerMsg.pose.position.x
         y0 = markerMsg.pose.position.y
-        z0 = markerMsg.pose.position.z
-        self.cup_position = self.calculate_reverse_kinematic(x0, y0)
+        [theta1, p1] = self.calculate_reverse_kinematic(x0, y0)
+
+        if p1 < self.nozzle['l']/2 or p1 > self.bolt['l']-self.nozzle['l']/2-self.leg['x']:
+            self.get_logger().warn("CUP outside of robot's workspace. Choose another location.")
+            self.state = 0
+        else:
+            self.cup_position = [theta1, p1]
+            self.state = 1
 
     def calculate_reverse_kinematic(self, x0, y0):
             theta1 = (atan2(y0, x0) + 2*pi) % (2*pi)
