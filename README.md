@@ -14,7 +14,7 @@
 * Karol Knyziak
 * [Lidia Łuczkiewicz](https://github.com/lluczkie)
 * Sebastian Łada
-* Wojciech KOnecki
+* Wojciech Konecki
 ### Visualization
 * [Lidia Łuczkiewicz](https://github.com/lluczkie)
 
