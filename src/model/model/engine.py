@@ -42,7 +42,14 @@ class Engine(Node):
         self.publisher.publish(self.jointMsg)
 
     def go(self):
-        self.jointMsg.position[0] += self.speed * self.period
+        if self.cup_position is not None:
+            if abs(self.cup_position[0] - self.jointMsg.position[0]) > self.speed * self.period:
+                self.jointMsg.position[0] += self.speed * self.period
+                self.jointMsg.position[0] %= (2*pi)
+        else:
+            self.jointMsg.position[0] += self.speed * self.period
+            self.jointMsg.position[0] %= (2*pi)
+
         self.jointMsg.header.stamp = self.get_clock().now().to_msg()
         self.publisher.publish(self.jointMsg)
 
@@ -53,10 +60,10 @@ class Engine(Node):
         x0 = markerMsg.pose.position.x
         y0 = markerMsg.pose.position.y
         z0 = markerMsg.pose.position.z
-        self.cup_position = [x0, y0, z0]
+        self.cup_position = self.calculate_reverse_kinematic(x0, y0)
 
     def calculate_reverse_kinematic(self, x0, y0):
-            theta1 = atan2(y0, x0)
+            theta1 = (atan2(y0, x0) + 2*pi) % (2*pi)
             x = x0-cos(theta1)*self.servo['x']/2
             y = y0-sin(theta1)*self.servo['x']/2
             p1 = sqrt(pow(x, 2) + pow(y, 2))
