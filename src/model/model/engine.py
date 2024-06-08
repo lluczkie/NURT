@@ -29,11 +29,12 @@ class Engine(Node):
         self.leg = self.params['leg']
         self.cup_position = None
 
-        self.j1_speed=0.15
-        self.p1_speed=0.1
-        self.period = 0.1
+        self.j1_speed=0.15 #rad/s
+        self.p1_speed=0.1 #m/s
+        self.period = 0.01 #Hz
         self.state = 0
         self.dir = 1
+        self.fill_speed = 0.1 #m of liquid/s
         self.filled = 0.0
         self.init_joints()
         self.timer = self.create_timer(self.period, self.go)
@@ -102,7 +103,7 @@ class Engine(Node):
             self.filled = 0.0
             self.state = 4
         else:
-            self.filled += 0.005
+            self.filled += self.fill_speed*self.period
 
 def main(args=None):
     rclpy.init(args=args)
