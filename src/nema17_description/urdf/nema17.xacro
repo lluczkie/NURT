@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<robot name="nema17" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find nema17_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find nema17_description)/urdf/nema17.trans" />
+<xacro:include filename="$(find nema17_description)/urdf/nema17.gazebo" />
+<link name="base_link">
+  <inertial>
+    <origin xyz="2.3720304016881362e-15 -4.15416882957642e-18 0.019668563572932028" rpy="0 0 0"/>
+    <mass value="0.5370759547377878"/>
+    <inertia ixx="0.000146" iyy="0.000146" izz="0.000152" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="servo_1">
+  <inertial>
+    <origin xyz="0.0001685635729320234 -8.104109710384824e-06 0.021149999999997636" rpy="0 0 0"/>
+    <mass value="0.5370759547377878"/>
+    <inertia ixx="0.000152" iyy="0.000146" izz="0.000146" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0 -0.0 -0.039" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/servo_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0 -0.0 -0.039" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/servo_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="bolt_1">
+  <inertial>
+    <origin xyz="0.06200000000000067 -1.0410971038066873e-07 -2.6142282782970483e-13" rpy="0 0 0"/>
+    <mass value="0.019112664306276495"/>
+    <inertia ixx="0.0" iyy="2.5e-05" izz="2.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0215 8e-06 -0.06015" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/bolt_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0215 8e-06 -0.06015" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/bolt_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="nozzle_1">
+  <inertial>
+    <origin xyz="-0.01644999999999998 7.895890570525599e-06 0.02438269100372132" rpy="0 0 0"/>
+    <mass value="0.0004262480901455858"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.04265 1.6e-05 -0.03865" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/nozzle_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.04265 1.6e-05 -0.03865" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find nema17_description)/meshes/nozzle_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="Rigid 7" type="fixed">
+  <origin xyz="0.0 0.0 0.039" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="servo_1"/>
+</joint>
+
+<joint name="Rigid 10" type="fixed">
+  <origin xyz="0.0215 -8e-06 0.02115" rpy="0 0 0"/>
+  <parent link="servo_1"/>
+  <child link="bolt_1"/>
+</joint>
+
+<joint name="Slider 11" type="prismatic">
+  <origin xyz="0.02115 -8e-06 -0.0215" rpy="0 0 0"/>
+  <parent link="bolt_1"/>
+  <child link="nozzle_1"/>
+  <axis xyz="1.0 0.0 0.0"/>
+  <limit upper="0.12" lower="0.004" effort="100" velocity="100"/>
+</joint>
+
+</robot>
