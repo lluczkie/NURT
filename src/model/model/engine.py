@@ -65,9 +65,7 @@ class Engine(Node):
     def turn(self):
         if abs(self.jointMsg.position[0] - pi) < self.j1_speed * self.period or abs(self.jointMsg.position[0] + pi) < self.j1_speed * self.period:
             self.dir = -self.dir
-        self.get_logger().info(f'{self.dir}')
         self.jointMsg.position[0] += copysign(self.j1_speed * self.period, self.dir)
-        # self.jointMsg.position[0] %= (2*pi)
 
     def move_nozzle_to_target(self):
         diff = self.cup_position[1] - self.jointMsg.position[1]
@@ -91,8 +89,9 @@ class Engine(Node):
             self.state = 1
 
     def calculate_reverse_kinematic(self, x0, y0):
-            theta1 = (atan2(y0, x0) + 2*pi) % (2*pi)
+            theta1 = atan2(y0, x0)
             p1 = sqrt(pow(x0, 2) + pow(y0, 2)) - self.servo['x']/2
+            self.get_logger().info(f'{theta1}')   
             return [theta1, p1]
 
     def fill(self):
