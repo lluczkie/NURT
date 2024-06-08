@@ -33,6 +33,7 @@ class Engine(Node):
         self.p1_speed=0.1
         self.period = 0.1
         self.state = 0
+        self.dir = 1
         self.filled = 0.0
         self.init_joints()
         self.timer = self.create_timer(self.period, self.go)
@@ -62,8 +63,11 @@ class Engine(Node):
         self.publisher.publish(self.jointMsg)
     
     def turn(self):
-        self.jointMsg.position[0] += self.j1_speed * self.period
-        self.jointMsg.position[0] %= (2*pi)
+        if abs(self.jointMsg.position[0] - pi) < self.j1_speed * self.period or abs(self.jointMsg.position[0] + pi) < self.j1_speed * self.period:
+            self.dir = -self.dir
+        self.get_logger().info(f'{self.dir}')
+        self.jointMsg.position[0] += copysign(self.j1_speed * self.period, self.dir)
+        # self.jointMsg.position[0] %= (2*pi)
 
     def move_nozzle_to_target(self):
         diff = self.cup_position[1] - self.jointMsg.position[1]
