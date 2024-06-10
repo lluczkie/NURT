@@ -1,3 +1,4 @@
+from ament_index_python import get_package_share_directory
 from launch import LaunchDescription
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
@@ -5,19 +6,18 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-import os
+import os, xacro
 
 def generate_launch_description():
     ld = LaunchDescription()
 
-    model = FindPackageShare(package="model").find("model")
+    share_dir = get_package_share_directory('model')
 
-    # Get the paths for URDF model and RViz configuration
-    my_model_path = os.path.join(model, "urdf/model.urdf")
-    
-    robot_description_content = ParameterValue(
-        Command(["xacro ", my_model_path]), value_type=str
-    )
+    # Get robot description
+
+    xacro_file = os.path.join(share_dir, 'urdf', 'model.urdf')
+    robot_description_config = xacro.process_file(xacro_file)
+    robot_description_content = robot_description_config.toxml()
 
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
