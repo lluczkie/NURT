@@ -88,7 +88,9 @@
   </collision>
 </link>
 
-<joint name="Rigid 7" type="fixed">
+<joint name="j1" type="revolute">
+  <limit lower="-3.14" upper="3.14" effort="0.0" velocity="0.0"/>
+  <axis xyz="0.0 0.0 1.0"/>
   <origin xyz="0.0 0.0 0.039" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child link="servo_1"/>
@@ -100,7 +102,7 @@
   <child link="bolt_1"/>
 </joint>
 
-<joint name="Slider 11" type="prismatic">
+<joint name="bolt_to_nozzle" type="prismatic">
   <origin xyz="0.02115 -8e-06 -0.0215" rpy="0 0 0"/>
   <parent link="bolt_1"/>
   <child link="nozzle_1"/>
