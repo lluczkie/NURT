@@ -11,11 +11,14 @@ import os, xacro
 def generate_launch_description():
     ld = LaunchDescription()
 
-    share_dir = get_package_share_directory('model')
+    share_dir = get_package_share_directory('nema17_description')
+    # share_dir = get_package_share_directory('model')
 
     # Get robot description
 
-    xacro_file = os.path.join(share_dir, 'urdf', 'model.urdf')
+    xacro_file = os.path.join(share_dir, 'urdf', 'nema17.xacro')
+    # xacro_file = os.path.join(share_dir, 'urdf', 'model.urdf')
+
     robot_description_config = xacro.process_file(xacro_file)
     robot_description_content = robot_description_config.toxml()
 
