@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cup_filler">
+
+  <xacro:property name="yaml_file" value="$(find model)/urdf/params.yaml" />
+  <xacro:property name="params_dict" value="${xacro.load_yaml(yaml_file)}"/>
+
+  <xacro:property name="servo" value="${params_dict['servo']}" />
+  <xacro:property name="bolt" value="${params_dict['bolt']}" />
+  <xacro:property name="nozzle" value="${params_dict['nozzle']}" />
+  <xacro:property name="leg" value="${params_dict['leg']}" />
+  <xacro:property name="wheel" value="${params_dict['wheel']}" />
+
+  <material name="white">
+      <color rgba="1 1 1 1"/>
+  </material>
+
+  <material name="gray">
+      <color rgba="0.7 0.7 0.7 1"/>
+  </material>
+  
+  <material name="black">
+      <color rgba="0.1 0.1 0.1 1"/>
+  </material>
+
+  <material name="silver">
+      <color rgba="0.700 0.700 0.700 1.000"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find model)/meshes/nema17.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="j1" type="revolute">
+        <axis xyz="0.0 0.0 1"/>
+        <limit lower="-3.14" upper="3.14" effort="250.0" velocity="0.5"/>
+        <parent link="base_link"/>
+        <child link="servo_adapter"/>
+        <origin xyz = "0 0 ${servo['z']}"/>
+  </joint>
+
+  <link name="servo_adapter">
+    <visual>
+      <geometry>
+        <box size="${servo['z']} ${servo['y']} ${servo['x']}"/>  
+      </geometry>
+      <material name="white"/>
+      <origin xyz="0 0 ${servo['x']/2}"/>
+    </visual>
+  </link>
+
+  <joint name="servo_adapter_to_servo" type="fixed">
+    <parent link="servo_adapter"/>
+    <child link="servo"/>
+  </joint>
+
+  <link name="servo">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find model)/meshes/nema17.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+      <origin rpy="0 1.57 0" xyz="${servo['z']/2} 0 ${servo['x']/2}"/>
+    </visual>
+  </link>
+
+  <joint name="servo_to_bolt" type="fixed">
+    <parent link="servo"/>
+    <child link="bolt"/>
+    <origin xyz = "${servo['x']/2 + servo['z']} 0 ${servo['x']/2}"/>
+  </joint>
+
+  <link name="bolt">
+    <visual>
+      <geometry>
+        <cylinder radius="${bolt['r']}" length="${bolt['l']}"/>
+      </geometry>
+      <material name="silver"/>
+      <origin xyz="${bolt['l']/2} 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+
+  <joint name="bolt_to_leg" type="fixed">
+    <parent link="bolt"/>
+    <child link="leg"/>
+    <origin xyz = "${bolt['l']-leg['x']/2} 0 0"/>
+  </joint>
+
+  <link name="leg">
+    <visual>
+      <geometry>
+        <box size="${leg['x']} ${leg['y']} ${leg['z']}"/>
+      </geometry>
+      <material name="white"/>
+      <origin xyz="0 0 ${-leg['z']/2}"/>
+    </visual>
+  </link>
+
+  <joint name="leg_to_wheel" type="fixed">
+    <parent link="leg"/>
+    <child link="wheel"/>
+    <origin xyz = "${leg['x']/2} 0 ${-leg['z']}"/>
+  </joint>
+
+  <link name="wheel">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find model)/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+
+  <joint name="wheel_to_rim" type="fixed">
+    <parent link="wheel"/>
+    <child link="rim"/>
+  </joint>
+
+  <link name="rim">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find model)/meshes/rim.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+
+  <joint name="bolt_to_nozzle" type="prismatic">
+    <limit lower="${nozzle['l']/2}" upper="${bolt['l']-nozzle['l']/2-leg['x']}" effort="250.0" velocity="0.5"/>
+    <parent link="bolt"/>
+    <child link="nozzle"/>
+    <origin xyz = "0 0 0"/>
+  </joint>
+
+  <link name="nozzle">
+    <visual>
+      <geometry>
+        <cylinder radius="${nozzle['r']}" length="${nozzle['l']}"/>
+      </geometry>
+      <material name="white"/>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    </visual>
+  </link>
+</robot>
