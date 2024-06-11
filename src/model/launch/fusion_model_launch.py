@@ -3,7 +3,6 @@ from launch import LaunchDescription
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
-from launch_ros.substitutions import FindPackageShare
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 import os, xacro
@@ -13,7 +12,8 @@ def generate_launch_description():
 
     share_dir = get_package_share_directory('model')
 
-    # Get robot description
+    # Get robot description and rviz config
+    rviz_config =  os.path.join(share_dir, "rviz/gui_controlled.rviz")
 
     xacro_file = os.path.join(share_dir, 'urdf', 'fusion_model.xacro')
 
@@ -37,7 +37,8 @@ def generate_launch_description():
         package="rviz2",
         executable="rviz2",
         name="rviz2",
-        output="screen"
+        output="screen",
+        arguments=['-d', str(rviz_config)]
     )
 
     ld.add_action(rviz)

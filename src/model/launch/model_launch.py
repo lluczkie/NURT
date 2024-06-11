@@ -10,14 +10,13 @@ import os, xacro
 
 def generate_launch_description():
     ld = LaunchDescription()
-
-    # share_dir = get_package_share_directory('nema17_description')
+    
     share_dir = get_package_share_directory('model')
 
-    # Get robot description
+    # Get robot description and rviz config
+    rviz_config =  os.path.join(share_dir, "rviz/engine_controlled.rviz")
 
     xacro_file = os.path.join(share_dir, 'urdf', 'fusion_model.xacro')
-    # xacro_file = os.path.join(share_dir, 'urdf', 'model.urdf')
 
     robot_description_config = xacro.process_file(xacro_file)
     robot_description_content = robot_description_config.toxml()
@@ -39,7 +38,8 @@ def generate_launch_description():
         package="rviz2",
         executable="rviz2",
         name="rviz2",
-        output="screen"
+        output="screen",
+        arguments=['-d', str(rviz_config)]
     )
 
     ld.add_action(rviz)
