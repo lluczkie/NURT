@@ -9,7 +9,6 @@ Panels:
         - /Grid1
         - /Grid1/Offset1
         - /TF1/Frames1
-        - /Pose1
       Splitter Ratio: 0.5
     Tree Height: 408
   - Class: rviz_common/Views
@@ -149,26 +148,6 @@ Visualization Manager:
                   {}
       Update Interval: 0
       Value: true
-    - Alpha: 1
-      Axes Length: 0.10000000149011612
-      Axes Radius: 0.009999999776482582
-      Class: rviz_default_plugins/Pose
-      Color: 0; 85; 0
-      Enabled: true
-      Head Length: 0.30000001192092896
-      Head Radius: 0.10000000149011612
-      Name: Pose
-      Shaft Length: 1
-      Shaft Radius: 0.05000000074505806
-      Shape: Axes
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /camera_pose
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -224,5 +203,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1492
-  X: 39
-  Y: -20
+  X: 52
+  Y: -17

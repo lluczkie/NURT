@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="simple_geometry_model">
 
   <xacro:property name="yaml_file" value="$(find model)/urdf/params.yaml" />
   <xacro:property name="params_dict" value="${xacro.load_yaml(yaml_file)}"/>

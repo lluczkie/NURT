@@ -15,7 +15,7 @@ def generate_launch_description():
     # Get robot description and rviz config
     rviz_config =  os.path.join(share_dir, "rviz/gui_controlled.rviz")
 
-    xacro_file = os.path.join(share_dir, 'urdf', 'fusion_model.xacro')
+    xacro_file = os.path.join(share_dir, 'urdf', 'fusion_parts_model.xacro')
 
     robot_description_config = xacro.process_file(xacro_file)
     robot_description_content = robot_description_config.toxml()

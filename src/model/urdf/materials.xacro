@@ -2,19 +2,19 @@
 <robot name="cup_filler" xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
   <material name="white">
-      <color rgba="1.0 1.0 1.0 1.0"/>
+    <color rgba="1.0 1.0 1.0 1.0"/>
   </material>
 
   <material name="gray">
-      <color rgba="0.7 0.7 0.7 1.0"/>
+    <color rgba="0.7 0.7 0.7 1.0"/>
   </material>
   
   <material name="black">
-      <color rgba="0.1 0.1 0.12 1.0"/>
+    <color rgba="0.1 0.1 0.12 1.0"/>
   </material>
 
   <material name="silver">
-      <color rgba="0.700 0.700 0.700 1.000"/>
+    <color rgba="0.700 0.700 0.700 1.000"/>
   </material>
 
   <material name="red">
