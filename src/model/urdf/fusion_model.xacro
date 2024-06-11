@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cup_filler">
 
+  <xacro:include filename="$(find model)/urdf/materials.xacro"/>
+
   <xacro:property name="yaml_file" value="$(find model)/urdf/params.yaml" />
   <xacro:property name="params_dict" value="${xacro.load_yaml(yaml_file)}"/>
 
@@ -9,26 +11,6 @@
   <xacro:property name="nozzle" value="${params_dict['nozzle']}" />
   <xacro:property name="leg" value="${params_dict['leg']}" />
   <xacro:property name="wheel" value="${params_dict['wheel']}" />
-
-  <material name="white">
-      <color rgba="1.0 1.0 1.0 1.0"/>
-  </material>
-
-  <material name="gray">
-      <color rgba="0.7 0.7 0.7 1.0"/>
-  </material>
-  
-  <material name="black">
-      <color rgba="0.1 0.1 0.1 1.0"/>
-  </material>
-
-  <material name="silver">
-      <color rgba="0.700 0.700 0.700 1.000"/>
-  </material>
-
-  <material name="red">
-    <color rgba="0.8 0.0 0.0 1.0"/>
-  </material>
 
   <link name="base_link">
     <visual>

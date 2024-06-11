@@ -10,17 +10,7 @@
   <xacro:property name="leg" value="${params_dict['leg']}" />
   <xacro:property name="wheel" value="${params_dict['wheel']}" />
 
-  <material name="white">
-      <color rgba="1.0 1.0 1.0 1.0"/>
-  </material>
-
-  <material name="gray">
-      <color rgba="0.7 0.7 0.7 1.0"/>
-  </material>
-  
-  <material name="black">
-      <color rgba="0.0 0.0 0.0 1.0"/>
-  </material>
+  <xacro:include filename="$(find model)/urdf/materials.xacro"/>
 
   <link name="base_link">
     <visual>
