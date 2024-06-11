@@ -91,7 +91,7 @@ class Engine(Node):
 
     def calculate_reverse_kinematic(self, x0, y0):
             theta1 = atan2(y0, x0)
-            p1 = sqrt(pow(x0, 2) + pow(y0, 2)) - self.servo['x']/2
+            p1 = sqrt(pow(x0, 2) + pow(y0, 2)) - self.servo['x']/2 - self.servo['z']
             self.get_logger().info(f'{theta1}')   
             return [theta1, p1]
 

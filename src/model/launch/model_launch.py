@@ -11,12 +11,12 @@ import os, xacro
 def generate_launch_description():
     ld = LaunchDescription()
 
-    share_dir = get_package_share_directory('nema17_description')
-    # share_dir = get_package_share_directory('model')
+    # share_dir = get_package_share_directory('nema17_description')
+    share_dir = get_package_share_directory('model')
 
     # Get robot description
 
-    xacro_file = os.path.join(share_dir, 'urdf', 'nema17.xacro')
+    xacro_file = os.path.join(share_dir, 'urdf', 'fusion_model.xacro')
     # xacro_file = os.path.join(share_dir, 'urdf', 'model.urdf')
 
     robot_description_config = xacro.process_file(xacro_file)
@@ -58,12 +58,5 @@ def generate_launch_description():
     )
 
     ld.add_action(engine)
-
-    nozzle_position = Node(
-        package="model",
-        executable="nozzle_position"
-    )
-
-    ld.add_action(nozzle_position)
-
+    
     return ld

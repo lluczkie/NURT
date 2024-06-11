@@ -21,14 +21,15 @@ class NozzlePosition(Node):
 
     def calculate_nozzle_position(self, jointMsg):
         theta1 = jointMsg.position[0]
-        r0 = jointMsg.position[1] + self.servo['x']/2
+        r0 = jointMsg.position[1] + self.servo['x']/2 + self.servo['z']
         x = cos(theta1)*r0
         y = sin(theta1)*r0
         nozzlePos = PointStamped()
-        nozzlePos.header = jointMsg.header
+        nozzlePos.header.stamp = jointMsg.header.stamp
+        nozzlePos.header.frame_id = 'base_link'
         nozzlePos.point.x = x
         nozzlePos.point.y = y
-        nozzlePos.point.z = self.servo['z']
+        nozzlePos.point.z = self.servo['z'] + self.servo['x']/2
         self.nozzle_publisher.publish(nozzlePos)
     
 def main(args=None):
