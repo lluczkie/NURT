@@ -11,15 +11,15 @@
   <xacro:property name="wheel" value="${params_dict['wheel']}" />
 
   <material name="white">
-      <color rgba="1 1 1 1"/>
+      <color rgba="1.0 1.0 1.0 1.0"/>
   </material>
 
   <material name="gray">
-      <color rgba="0.7 0.7 0.7 1"/>
+      <color rgba="0.7 0.7 0.7 1.0"/>
   </material>
   
   <material name="black">
-      <color rgba="0 0 0 1"/>
+      <color rgba="0.0 0.0 0.0 1.0"/>
   </material>
 
   <link name="base_link">
